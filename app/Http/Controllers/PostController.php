@@ -4,16 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostDetailResource;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $posts = Post::all();
+        return PostResource::collection($posts); //For json array
+
+        // return response()->json(['data' => $posts]);
+    }
+
+    public function show(String $id)
+    {
+        // with(write:id,username)-> no space, id should be included
+        $post = Post::with('writer:id,username')->findOrFail($id);
+        return new PostDetailResource($post); //For json object
     }
 
     /**
@@ -35,10 +45,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
