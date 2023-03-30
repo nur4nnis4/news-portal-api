@@ -7,14 +7,15 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostDetailResource;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
 
     public function index()
     {
-        $posts = Post::all();
-        return PostResource::collection($posts); //For json array
+        $posts = Post::with('writer:id,username')->get();
+        return PostDetailResource::collection($posts); //For json array
 
         // return response()->json(['data' => $posts]);
     }
@@ -26,48 +27,27 @@ class PostController extends Controller
         return new PostDetailResource($post); //For json object
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StorePostRequest $request)
     {
-        //
+        $request['author'] = Auth::user()->id;
+        $post =  Post::create($request->all());
+
+        return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
+    public function update(UpdatePostRequest $request, String $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+
+        return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function destroy(String $id)
     {
-        //
-    }
+        $deletedPost = Post::findOrFail($id);
+        $deletedPost->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Post $post)
-    {
-        //
+        return response()->json(['message' => 'success']);
     }
 }

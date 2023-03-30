@@ -20,14 +20,14 @@ class UserSeeder extends Seeder
         // User::truncate();
         // Schema::enableForeignKeyConstraints();
 
-        // Student::factory()->count(30)->create();
-        User::insert([
-            'email' => 'admin@email.com',
-            'username' => 'admin',
-            'password' => Hash::make('rahasia'),
-            'firstname' => fake()->firstName(),
-            'lastname' => fake()->lastName(),
-            'created_at' => Carbon::now(),
-        ]);
+        User::factory()->count(4)->create();
+        // User::insert([
+        //     'email' => 'admin@email.com',
+        //     'username' => 'admin',
+        //     'password' => Hash::make('rahasia'),
+        //     'firstname' => fake()->firstName(),
+        //     'lastname' => fake()->lastName(),
+        //     'created_at' => Carbon::now(),
+        // ]);
     }
 }

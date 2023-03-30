@@ -18,12 +18,14 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $firstName = fake()->firstName();
+        $lastName = fake()->lastName();
         return [
-            'email' => fake()->unique()->safeEmail(),
-            'username' => fake()->userName(),
+            'email' => $firstName . '@email.com',
+            'username' => $firstName . $lastName,
             'password' => Hash::make('rahasia'),
-            'firstname' => fake()->firstName(),
-            'lastname' => fake()->lastName(),
+            'firstname' => $firstName,
+            'lastname' => $lastName,
         ];
     }
 

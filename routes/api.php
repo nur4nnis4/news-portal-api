@@ -10,10 +10,14 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    Route::get('/current-user', [AuthController::class, 'currentUser']);
     Route::get('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/current-user', [AuthController::class, 'currentUser']);
-
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/posts/{id}', [PostController::class, 'show']);
+    Route::controller(PostController::class)->group(function () {
+        Route::get('/posts',  'index');
+        Route::get('/posts/{id}',  'show');
+        Route::post('/posts', 'store');
+        Route::patch('/posts/{id}', 'update')->middleware('post-author');
+        Route::delete('/posts/{id}', 'destroy')->middleware('post-author');
+    });
 });
