@@ -29,6 +29,10 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
+        if ($request->file) {
+            $filename = $request->file->store('post');
+            $request['image'] = $filename;
+        }
         $request['author'] = Auth::user()->id;
         $post =  Post::create($request->all());
 

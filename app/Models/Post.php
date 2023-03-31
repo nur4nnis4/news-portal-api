@@ -13,7 +13,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'content', 'author'];
+    protected $fillable = ['title', 'content', 'author', 'image'];
 
     public function writer(): BelongsTo
     {
