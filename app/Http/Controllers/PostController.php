@@ -23,7 +23,7 @@ class PostController extends Controller
     public function show(String $id)
     {
         // with(write:id,username)-> no space, id should be included
-        $post = Post::with('writer:id,username')->findOrFail($id);
+        $post = Post::with(['writer:id,username', 'comments.commenter'])->findOrFail($id);
         return new PostDetailResource($post); //For json object
     }
 

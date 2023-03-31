@@ -16,9 +16,17 @@ class PostDetailResource extends JsonResource
             'content' =>  $this->content,
             'author' => $this->whenLoaded('writer'), //Eager loading
             'created_at' =>  Carbon::parse($this->created_at)->format('Y-m-d'),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
+            'total_comments' => $this->whenLoaded('comments', function () {
+                return $this->comments->count();
+            }),
 
+            // 'comments' => $this->whenLoaded('comments', function () {
+            //     return  collect($this->comments)->each(function ($comment) {
+            //         $comment->commenter;
+            //         return $comment;
+            //     });
+            // })
         ];
-
-        // return parent::toArray($request);
     }
 }
